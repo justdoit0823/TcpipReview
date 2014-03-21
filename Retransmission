@@ -1,0 +1,19 @@
+# TCP Retransmission
+
+"2186","685.491678000","172.28.171.107","210.31.143.213","TCP","74","54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=164785 TSecr=0 WS=128"
+
+"2188","686.491703000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=165036 TSecr=0 WS=128"
+
+"2191","688.495701000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=165537 TSecr=0 WS=128"
+
+"2203","692.507670000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=166540 TSecr=0 WS=128"
+
+"2229","700.523705000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=168544 TSecr=0 WS=128"
+
+"2262","716.555718000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=172552 TSecr=0 WS=128"
+
+"2322","748.651711000","172.28.171.107","210.31.143.213","TCP","74","[TCP Retransmission] 54475 > http-alt [SYN] Seq=0 Win=29200 Len=0 MSS=1460 SACK_PERM=1 TSval=180576 TSecr=0 WS=128"
+  
+  这是我在终端里面用 nc 210.31.143.213 8080(http-alt) 命令时，用wireshark看到的结果。上面有八个报文段，但只有第一个是建立TCP连接时应该发送的。由于校园网需要先认证一下，才能访问外网，所以210.31.143.213就是认证时用到的ip。不过8080端口明显不能建立连接，但链路应该是通的，只不过用规则限制了一下，收到了给丢了，因为没有看到210.31.143.213发来的ICMP端口不可达的消息。
+
+  同时，看看超时重传的时候，报文段的时间间隔。上面，第二列是时间(s)，可以看到间隔时间依次是 1s, 2.004s, 4.012s, 8.016s,16.032s,32.006s，并且进行了六次重传，这个数正好是系统所规定的(/proc/sys/net/ipv4/tcp_syn_retries)SYN重传次数。而时间间隔，也按照了指数退避原则来进行的。
