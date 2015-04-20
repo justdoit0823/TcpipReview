@@ -11,21 +11,22 @@ python的套接字实现模拟
 客户端连接的实现
 ----------------
 
-	`import socket`
-	``
-	`client1 = socket.socket()`
-	`client1.connect(('', 9999))`
+	import socket
+
+	client1 = socket.socket()
+	client1.connect(('', 999))
 
 
 服务端处理连接的实现
 --------------------
 
-	`import socket`
-	``
-	`server = socket.socket()`
-	`server.bind(('', 9999))`
-	`server.listen(5)`
-	`client, addr = server.accept()`
+	import socket
+
+	server = socket.socket()
+	server.bind(('', 9999))
+	server.listen(5)
+	client, addr = server.accept()
+
 
 TCP协议栈的表现
 ===============
